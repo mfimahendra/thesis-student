@@ -1,6 +1,12 @@
+<script setup>
+import NavBar from '../components/NavBar.vue'
+
+</script>
+
 <template>
+  <NavBar />
   <div class="home">
-    <h1>Tes</h1>
+    <h1>Home</h1>
   </div>
 </template>
 

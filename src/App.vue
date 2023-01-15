@@ -1,10 +1,9 @@
 <script setup>
-import NavBar from './components/NavBar.vue'
+import 'admin-lte'
 
 </script>
 
-<template>
-  <NavBar />
+<template>  
   <router-view />
 </template>
 

@@ -25,7 +25,7 @@ import "../node_modules/admin-lte/plugins/jquery-knob/jquery.knob.min.js"
 //import "../node_modules/admin-lte/plugins/jqvmap/maps/jquery.vmap.usa.js"
 //import "../node_modules/admin-lte/plugins/jqvmap/jquery.vmap.min.js"
 import "../node_modules/admin-lte/plugins/sparklines/sparkline.js"
-//import "../node_modules/admin-lte/plugins/chart.js/Chart.min.js"
+import "../node_modules/admin-lte/plugins/chart.js/Chart.min.js"
 import "../node_modules/admin-lte/plugins/jquery/jquery.min.js"
 import "../node_modules/admin-lte/plugins/jquery-ui/jquery-ui.min.js"
 import "../node_modules/admin-lte/plugins/inputmask/jquery.inputmask.min.js"
@@ -47,8 +47,13 @@ import "../node_modules/admin-lte/plugins/bootstrap4-duallistbox/bootstrap-duall
 import "../node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css"
 import "../node_modules/admin-lte/plugins/dropzone/min/dropzone.min.css"
 
+//new Admin LTE
+
+
 library.add(fas, fab, far, faLock, faEnvelope, faFacebook, faGooglePlus);
 dom.watch()
+
+
 
 createApp(App).component("font-awesome-icon", FontAwesomeIcon).use(router).mount('#app')
 
