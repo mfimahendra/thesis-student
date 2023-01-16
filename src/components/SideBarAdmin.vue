@@ -1,14 +1,15 @@
 <script setup>
+import PPITLogo from '../assets/PPIT.jpg'
+
 
 </script>
 
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4 control-sidebar-push">
 
-        <a href="index3.html" class="brand-link">
-            <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-            <i class="brand-image mt-1 ms-3 nav-icon fas fa-tachometer-alt"></i>
-            <span class="brand-text font-weight-light"> Dashboard</span>
+        <a href="" class="brand-link">            
+            <img :src="PPITLogo" alt="PPIT Logo" class="brand-image elevation-1 ms-3" />
+            <span class="brand-text font-weight-light"> PPIT Pendataan</span>
         </a>
 
         <div
@@ -23,26 +24,6 @@
             <div class="os-padding">
                 <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
                     <div class="os-content" style="padding: 0px 8px; height: 100%; width: 100%;">
-
-                        <div class="form-inline mt-3">
-                            <!-- <div class="input-group" data-widget="sidebar-search">
-                                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                                    aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sidebar">
-                                        <i class="fas fa-search fa-fw"></i>
-                                    </button>
-                                </div>
-                            </div> -->
-                            <div class="sidebar-search-results">
-                                <div class="list-group">
-                                    <a href="#" class="list-group-item">
-
-                                        <div class="search-path"></div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
 
                         <nav class="mt-2">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -66,7 +47,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
+                                        <i class="nav-icon fas fa-city"></i>
                                         <p>
                                             City
                                             <i class="fas fa-angle-left right"></i>
@@ -96,7 +77,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
+                                        <i class="nav-icon fas fa-university"></i>
                                         <p>
                                             Universities
                                             <i class="right fas fa-angle-left"></i>
@@ -125,7 +106,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-tree"></i>
+                                        <i class="nav-icon fas fa-user"></i>
                                         <p>
                                             Students
                                             <i class="fas fa-angle-left right"></i>
@@ -151,11 +132,9 @@
                                             </a>
                                         </li>         
                                     </ul>
-                                </li>                                
-                                <li class="nav-header">EXAMPLES</li>                                                                                                
+                                </li>                                                                                                                                                         
                             </ul>
                         </nav>
-
                     </div>
                 </div>
             </div>
