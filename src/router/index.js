@@ -10,6 +10,14 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/admin/city',
+    name: 'City',
+    component: () => import('../views/admin/DashboardView.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 
   //Client Page
   {

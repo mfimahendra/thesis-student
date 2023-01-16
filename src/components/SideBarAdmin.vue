@@ -29,31 +29,31 @@ import PPITLogo from '../assets/PPIT.jpg'
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                                 data-accordion="false">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <router-link to="/admin/dashboard" class="nav-link">
                                         <i class="nav-icon fas fa-tachometer-alt"></i>
                                         <p>
                                             Dashboard
                                         </p>
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/widgets.html" class="nav-link">
+                                    <router-link to="/admin/students_distribution" class="nav-link">
                                         <i class="nav-icon fas fa-th"></i>
                                         <p>
                                             Students Distribution
                                             <!-- <span class="right badge badge-danger">New</span> -->
                                         </p>
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-city"></i>
                                         <p>
                                             City
                                             <i class="fas fa-angle-left right"></i>
                                             <span class="badge badge-info right"></span>
                                         </p>
-                                    </a>
+                                    </router-link>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="pages/layout/top-nav.html" class="nav-link">
