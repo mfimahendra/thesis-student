@@ -85,4 +85,9 @@ import Sidebar from '../../components/SideBarAdmin.vue'
 
 <script>
 
+export default {
+    name: "DashboardView",
+    
+}
+
 </script>
