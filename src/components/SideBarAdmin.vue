@@ -46,20 +46,20 @@ import PPITLogo from '../assets/PPIT.jpg'
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link to="/admin/city" class="nav-link">
+                                    <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-city"></i>
                                         <p>
                                             City
                                             <i class="fas fa-angle-left right"></i>
                                             <span class="badge badge-info right"></span>
                                         </p>
-                                    </router-link>
+                                    </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="pages/layout/top-nav.html" class="nav-link">
+                                            <router-link to="/admin/city" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>North Region</p>
-                                            </a>
+                                            </router-link>
                                         </li>
                                         <li class="nav-item">
                                             <a href="pages/layout/boxed.html" class="nav-link">
