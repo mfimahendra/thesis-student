@@ -60,20 +60,16 @@ export default {
             password: "",
         };
     },
-    methods: {
-        //login using axios
+    methods: {        
         async handleSubmit() {            
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+            const response = await axios.post('http://127.0.0.1:8000/api/login', {
                 email: this.email,
                 password: this.password,                
-            });            
-            
+            });                        
 
-            sessionStorage.setItem('token', response.data.access_token);
-
+            localStorage.setItem('token', response.data.token);                                    
             this.$router.push('/admin/dashboard');
-        }
-        
+        }        
     },
 };
 

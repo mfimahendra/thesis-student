@@ -16,7 +16,7 @@ const routes = [
     component: () => import('../views/admin/CityView.vue'),
     meta: {
       requiresAuth: true
-    }
+    }    
   },
 
   //Client Page
@@ -43,16 +43,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.name;
-  // if (to.meta.requiresAuth && !store.getters['auth/token']) {
-  //   next('/login');
-  // } else if (to.meta.requiresUnauth && !!store.getters['auth/token']) {
-  //   next('/');
-  // } else {
-  //   next();
-  // }
-
-  next();
+  document.title = to.name;  
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isAuthenticated = localStorage.getItem('token')
+  if (requiresAuth && !isAuthenticated) {
+    next('/login')
+  } else {
+    next()
+  }
 });
+
 
 export default router

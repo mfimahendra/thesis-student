@@ -40,7 +40,7 @@ import $ from 'jquery';
                     <div class="dropdown-divider"></div>                    
                     <a href="#" class="dropdown-item dropdown-footer">Setting</a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">Log Out</a>
+                    <a href="#" @click="userLogout" class="dropdown-item dropdown-footer">Log Out</a>
                 </div>
             </li>       
         </ul>
@@ -49,4 +49,23 @@ import $ from 'jquery';
 
 <script>
 $("#toggle-sidebar").ControlSidebar('toggle');
+
+export default{
+    methods: {
+        userLogout() {
+            console.log("userLogout");
+            $.ajax({
+                url: 'http://localhost:8080/api/logout',
+                type: 'POST',
+                success: function (data) {
+                    console.log(data);
+                    this.$router.push({ name: 'Login' });
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    }
+}
 </script>
