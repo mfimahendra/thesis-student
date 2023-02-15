@@ -52,8 +52,7 @@ import axios from 'axios';
 </style>
 
 <script>
-export default {
-    name: "LoginView",
+export default {    
     data() {
         return {
             email: "",

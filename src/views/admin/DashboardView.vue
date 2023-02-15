@@ -1,7 +1,7 @@
 <script setup>
+import axios from 'axios';
 import Navbar from '../../components/NavBarAdmin.vue'
 import Sidebar from '../../components/SideBarAdmin.vue'
-// import $ from 'jquery';
 
 </script>
 
@@ -13,7 +13,7 @@ import Sidebar from '../../components/SideBarAdmin.vue'
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 id="hi-user" class="m-0"></h1>                        
+                        <h1 id="hi-user" class="m-0"></h1>
                         <h1 class="m-0">Dashboard</h1>
                     </div>
                     <div class="col-sm-6">
@@ -39,7 +39,6 @@ import Sidebar from '../../components/SideBarAdmin.vue'
                 </div>
 
                 <div class="col-lg-3 col-6">
-
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>130</h3>
@@ -53,7 +52,6 @@ import Sidebar from '../../components/SideBarAdmin.vue'
                 </div>
 
                 <div class="col-lg-3 col-6">
-
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>44</h3>
@@ -87,37 +85,31 @@ import Sidebar from '../../components/SideBarAdmin.vue'
 </template>
 
 <script>
-import axios from 'axios';
-import $ from 'jquery';
 
 export default {
     name: "DashboardView",
     mounted() {
-        this.getUser();        
-
+        
     },
     data() {
         return {
-            email : '',
-            password : '',
+            email: '',
+            password: '',
         }
     },
     created() {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-    },
-    methods: {        
-        getUser() {
-            axios.get('http://localhost:8000/api/user')
+        axios.get('fetch/dashboard/chart')
             .then(response => {
-                this.user = response.data;                                    
-                // console.log(this.user.data.name);       
-                $("#hi-user").append("Hi, " + this.user.data.name + "!");
+                console.log(response.data)
+                if(response.data.success) {
+                    this.students = response.data.students
+                    this.alumni = response.data.alumni
+                }
             })
             .catch(error => {
-                console.log(error);
+                console.log(error)
             })
-        },
-    },
+    }    
 }
 
 </script>

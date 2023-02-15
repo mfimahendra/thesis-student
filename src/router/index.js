@@ -5,18 +5,18 @@ const routes = [
   {
     path: '/admin/dashboard',
     name: 'Dashboard',
-    component: () => import('../views/admin/DashboardView.vue'),
+    component: () => import('../views/admin/DashboardView.vue'),    
     meta: {
       requiresAuth: true
     }
-  },
+  },  
   {
     path: '/admin/city',
     name: 'City',
     component: () => import('../views/admin/CityView.vue'),
     meta: {
       requiresAuth: true
-    }    
+    } 
   },
 
   //Client Page

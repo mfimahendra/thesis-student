@@ -35,104 +35,34 @@ import PPITLogo from '../assets/PPIT.jpg'
                                             Dashboard
                                         </p>
                                     </router-link>
-                                </li>
+                                </li>                                           
                                 <li class="nav-item">
-                                    <router-link to="/admin/students_distribution" class="nav-link">
-                                        <i class="nav-icon fas fa-th"></i>
-                                        <p>
-                                            Students Distribution
-                                            <!-- <span class="right badge badge-danger">New</span> -->
-                                        </p>
-                                    </router-link>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-city"></i>
                                         <p>
                                             City
-                                            <i class="fas fa-angle-left right"></i>
-                                            <span class="badge badge-info right"></span>
+                                            
                                         </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <router-link to="/admin/city" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>North Region</p>
-                                            </router-link>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/boxed.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>East Region</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>South Region</p>
-                                            </a>
-                                        </li>                                                                                
-                                    </ul>
-                                </li>
+                                    </router-link>
+                                </li>                                                                                                                                                                
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-university"></i>
                                         <p>
                                             Universities
-                                            <i class="right fas fa-angle-left"></i>
+                                            
                                         </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="pages/layout/top-nav.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>North Region</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/boxed.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>East Region</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>South Region</p>
-                                            </a>
-                                        </li>         
-                                    </ul>
-                                </li>
+                                    </router-link>
+                                </li>                                                                                                                                                                
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-user"></i>
                                         <p>
                                             Students
-                                            <i class="fas fa-angle-left right"></i>
+                                            
                                         </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="pages/layout/top-nav.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>North Region</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/boxed.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>East Region</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>South Region</p>
-                                            </a>
-                                        </li>         
-                                    </ul>
-                                </li>                                                                                                                                                         
+                                    </router-link>
+                                </li>                                                                                                                                                                
                             </ul>
                         </nav>
                     </div>
