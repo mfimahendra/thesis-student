@@ -34,7 +34,8 @@ import $ from 'jquery';
         <ul class="navbar-nav ml-auto">                              
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-user-circle"></i>                    
+                    <i class="far fa-user-circle"></i>
+                    <span id="hi-user"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-header">Users</span>
@@ -81,7 +82,7 @@ export default{
                     this.user = response.data;
                     // console.log(this.user.data.name);
                     $("#hi-user").html('');
-                    $("#hi-user").append("Hi, " + this.user.data.name + "!");
+                    $("#hi-user").append(" " + this.user.data.name);
                 })
                 .catch(error => {
                     console.log(error);

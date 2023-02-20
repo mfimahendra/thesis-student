@@ -4,18 +4,12 @@ import Sidebar from '../../components/SideBarAdmin.vue'
 
 </script>
 
-<template>
-    <Navbar />
-    <Sidebar />
+<template>    
+<Navbar />
+<Sidebar />    
 
-    <div class="content-wrapper">
-
-    </div>
 </template>
 
 <script>
 
-export default {
-    
-}
 </script>
