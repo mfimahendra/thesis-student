@@ -4,6 +4,21 @@ import PPITLogo from '../assets/PPIT.jpg'
 
 </script>
 
+<style>
+.main-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    height: 100vh !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #343a40;
+    transition: all 0.3s ease-in-out;
+}
+
+</style>
+
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4 control-sidebar-push">
 
@@ -13,7 +28,7 @@ import PPITLogo from '../assets/PPIT.jpg'
         </a>
 
         <div
-            class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
+            class="sidebar os-host os-theme-light os-host-resize-disabled os-host-transition">
             <div class="os-resize-observer-host observed">
                 <div class="os-resize-observer" style="left: 0px; right: auto;"></div>
             </div>

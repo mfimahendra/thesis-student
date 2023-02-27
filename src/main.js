@@ -55,7 +55,10 @@ require( 'jquery' );
 require( 'jszip' );
 require( 'pdfmake' );
 
+require( 'datatables.net' );
+require( 'datatables.net-bs4' );
 
+// fontawesome
 library.add(fas, fab, far, faLock, faEnvelope, faFacebook, faGooglePlus);
 dom.watch()
 
