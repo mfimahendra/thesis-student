@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios';
 import $ from 'jquery';
 
 </script>
@@ -52,43 +51,4 @@ import $ from 'jquery';
 <script>
 $("#toggle-sidebar").ControlSidebar('toggle');
 
-export default{
-    created() {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        this.getUser();
-    },
-    methods: {
-        userLogout() {
-            
-            let data = {
-                token: localStorage.getItem('token')
-            };
-
-           axios.post('http://localhost:8000/api/logout', data)
-            .then(response => {
-                response.data;
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                this.$router.push({ name: 'Login' });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        },
-
-        getUser() {
-            axios.get('http://localhost:8000/api/user')
-                .then(response => {
-                    this.user = response.data;
-                    // console.log(this.user.data.name);
-                    $("#hi-user").html('');
-                    $("#hi-user").append(" " + this.user.data.name);
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.$router.push({ name: 'Login' });
-                })
-        },
-    }
-}
 </script>

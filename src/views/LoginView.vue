@@ -1,10 +1,11 @@
 <script setup>
 import axios from 'axios';
-
+import Loading from '../components/LoadingSpinner.vue';
 
 </script>
 
 <template>
+    <Loading />
     <!-- Section: Design Block -->
     <section class="loginForm vh-100">
         <form @submit.prevent="handleSubmit">
@@ -13,29 +14,31 @@ import axios from 'axios';
                     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="card shadow-2-strong customCard" style="border-radius: 1px;">
                             <div class="card-body p-5 text-center">
-    
+
                                 <h3 class="mb-3" style="font-size: 24px;">Login Admin</h3>
-    
+
                                 <div class="form-outline mb-2">
-                                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg" v-model="email" placeholder="Email" autocomplete="off" />                                
+                                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg"
+                                        v-model="email" placeholder="Email" autocomplete="off" />
                                 </div>
-    
+
                                 <div class="form-outline mb-4">
-                                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg" v-model="password" placeholder="Password" autocomplete="off"/>                                
-                                </div>                            
-    
+                                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg"
+                                        v-model="password" placeholder="Password" autocomplete="off" />
+                                </div>
+
                                 <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-    
-                                <hr class="my-2">  
-    
+
+                                <hr class="my-2">
+
                                 <router-link class="nav-link" to="/">Back</router-link>
-                            </div>                                                
-                        </div>                    
+                            </div>
+                        </div>
                     </div>
                     <div class="spacer"></div>
                 </div>
             </div>
-        </form>        
+        </form>
     </section>
 </template>
 
@@ -45,30 +48,41 @@ import axios from 'axios';
     background-color: #333;
 }
 
-.customCard{
+.customCard {
     background-color: #f3f3f3;
 }
-
 </style>
 
 <script>
-export default {    
+import $ from 'jquery';
+
+export default {
     data() {
         return {
             email: "",
             password: "",
         };
     },
-    methods: {        
-        async handleSubmit() {            
-            const response = await axios.post('http://127.0.0.1:8000/api/login', {
-                email: this.email,
-                password: this.password,                
-            });                        
+    mounted() {
+        $('#Loading').hide();
+    },
+    methods: {
+        async handleSubmit() {
+            $('#Loading').show();
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/api/login', {
+                    email: this.email,
+                    password: this.password,
+                });
 
-            localStorage.setItem('token', response.data.token);                                    
-            this.$router.push('/admin/dashboard');
-        }        
+                $('#Loading').hide();
+                localStorage.setItem('token', response.data.token);
+                this.$router.push('/admin/dashboard');
+            } catch (error) {
+                $('#Loading').hide();
+                console.log(error);
+            }
+        }
     },
 };
 

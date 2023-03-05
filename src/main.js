@@ -47,7 +47,6 @@ import "../node_modules/admin-lte/plugins/bootstrap4-duallistbox/bootstrap-duall
 import "../node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css"
 import "../node_modules/admin-lte/plugins/dropzone/min/dropzone.min.css"
 
-//new Admin LTE
 
 //dataTable
 

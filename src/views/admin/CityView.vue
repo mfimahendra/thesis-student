@@ -1,17 +1,65 @@
 <script setup>
-import Navbar from '../../components/NavBarAdmin.vue'
-import Sidebar from '../../components/SideBarAdmin.vue'
+import Master from './Master.vue'
 
 </script>
 
+<style>
+.headerCustom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.dataTables_filter {
+    display: none;
+}
+</style>
+
 <template>
-    <Navbar />
-    <Sidebar />
+    <Master />
 
     <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <h1>City</h1>
+        <div class="content-header" style="padding: 15px 8px 0px 8px;">
+            <div class="card headerCustom">
+                <div>
+                    <h1>City</h1>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalAddCity">
+                        <i class="fas fa-plus"></i> Add City
+                    </button>
+                </div>
+            </div>
+            <div class="card headerCustom">
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="SelectRegionLabel">
+                                <i class="fa-solid fa-earth-asia"></i>
+                            </span>
+                        </div>
+                        <select id="SelectRegion" class="form-select" placeholder="Select Region ..." aria-label="regions"
+                            @change="selectRegion($event.target.value)"
+                            aria-describedby="SelectRegionLabel">
+                            <option selected value="">All Region</option>
+                            <option v-for="region in regions" :key="region.id" :value="region.region">
+                                {{region.region}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="SearchCityLabel"><i class="fas fa-city"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search City" aria-label="Search City"
+                            aria-describedby="SearchCityLabel" @keyup="searchCity($event.target.value)">                        
+                    </div>
+                </div>
             </div>
         </div>
         <section class="content">
@@ -48,46 +96,72 @@ import 'datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 export default {
     name: "CityView",
     components: {
-        Navbar,
-        Sidebar
+        Master,
     },
     data() {
         return {
-            cities: []
+            cities: [],
+            selected: '',
+            regions: [],
         }
     },
     mounted() {
         this.initTable();
         this.getCities();
+        this.getRegion();
     },
-    methods: {
-        initTable() {
-            let initTable = ''
-
-            initTable += '<table id="tableMaster" class="table table-bordered table-striped">'
-            initTable += '<thead>'
-            initTable += '<tr>'
-            initTable += '<th width="0.1%" style="text-align:center;">No</th>'
-            initTable += '<th width="5%">City</th>'
-            initTable += '<th width="1%">Longitude</th>'
-            initTable += '<th width="1%">Latitude</th>'
-            initTable += '<th width="1%">Region</th>'            
-            initTable += '<th width="1%">#</th>'            
-            initTable += '</tr>'
-            initTable += '</thead>'
-            initTable += '<tbody id="bodyTableMaster">'
-            initTable += '</tbody>'            
-            initTable += '</table>'
-            $('.table-container').html(initTable);
+    methods: {        
+        selectRegion(value) {            
+            $("#tableMaster").DataTable().columns(4).search(value).draw();
         },
-        getCities() {
-            axios.get('http://localhost:8000/api/city')
+        searchCity(value){                        
+            $("#tableMaster").DataTable().search(value).draw();
+        }, 
+        getRegion() {
+            axios.get('http://localhost:8000/api/region')
                 .then(response => {
-                    this.cities = response.data.cities;
-                    this.renderTable();
+                    this.regions = response.data.regions;
+                    this.regions.forEach((region) => {                        
+                        region.value = region.region;
+                    })
+                    $("#Loading").hide();
                 })
                 .catch(error => {
                     console.log(error);
+                    $("#Loading").hide();
+                })
+
+        },
+        initTable() {
+            let initTable = '';
+            initTable += '<table id="tableMaster" class="table table-bordered table-striped">';
+            initTable += '<thead>';
+            initTable += '<tr>';
+            initTable += '<th width="0.1%" style="text-align:center;">No</th>';
+            initTable += '<th width="5%">City</th>';
+            initTable += '<th width="1%">Longitude</th>';
+            initTable += '<th width="1%">Latitude</th>';
+            initTable += '<th width="1%">Region</th>';
+            initTable += '<th width="1%">#</th>';
+            initTable += '</tr>';
+            initTable += '</thead>';
+            initTable += '<tbody id="bodyTableMaster">';
+            initTable += '</tbody>';
+            initTable += '</table>';
+            $('.table-container').html(initTable);
+        },
+        getCities() {
+            $('#Loading').show();
+            axios.get('http://localhost:8000/api/city')
+                .then(response => {
+
+                    this.cities = response.data.cities;
+                    this.renderTable();
+                    $('#Loading').hide();
+                })
+                .catch(error => {
+                    console.log(error);
+                    $('#Loading').hide();
                 })
         },
         renderTable() {
@@ -114,7 +188,7 @@ export default {
                 idx++;
             });
 
-            $('#bodyTableMaster').html(tableData);            
+            $('#bodyTableMaster').html(tableData);
 
             $('#tableMaster').DataTable({
                 'dom': 'Bfrtip',
@@ -124,7 +198,7 @@ export default {
                 'lengthChange': true,
                 'searching': true,
                 'ordering': true,
-                'info': true,                
+                'info': true,
                 'buttons': [
                     {
                         extend: 'pageLength',
@@ -146,11 +220,13 @@ export default {
                     {
                         extend: 'csv',
                         text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Data City',
+                        header: true,
                         className: 'btn btn-primary',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4]
                         }
-                    },                    
+                    },
                     {
                         extend: 'print',
                         text: '<i class="fas fa-print"></i> Print',
@@ -160,10 +236,11 @@ export default {
                         }
                     },
                 ]
-            });                        
+            });
         }
+
+        // End of Mounted
     }
-
-
 }
+
 </script>

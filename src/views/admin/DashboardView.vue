@@ -1,13 +1,11 @@
 <script setup>
-// import axios from 'axios';
-import Navbar from '../../components/NavBarAdmin.vue'
-import Sidebar from '../../components/SideBarAdmin.vue'
+import MasterLayout from './Master.vue'
 
 </script>
 
 <template>
-    <Navbar />
-    <Sidebar />
+    <MasterLayout />
+
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
@@ -156,6 +154,7 @@ function fetchChart() {
                 regionI = regionI + 1;
             }
         }
+        
         Highcharts.chart('mapChartContainer', {
             series: [{
                 name: 'Regions',
