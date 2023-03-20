@@ -7,5 +7,9 @@ module.exports = {
 	configureWebpack: {
 		plugins: [			
 		]
+	},
+
+	pwa : {
+		name : 'Indonesian Students Data',
 	}
 }

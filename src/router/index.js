@@ -18,6 +18,22 @@ const routes = [
       requiresAuth: true
     } 
   },
+  {
+    path: '/admin/university',
+    name: 'University',
+    component: () => import('../views/admin/UniversityView.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/student',
+    name: 'Student',
+    component: () => import('../views/admin/StudentView.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 
   //Client Page
   {
