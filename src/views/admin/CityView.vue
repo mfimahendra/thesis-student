@@ -1,5 +1,5 @@
 <script setup>
-import Master from './Master.vue'
+import MasterLayout from './Master.vue'
 
 </script>
 
@@ -18,17 +18,17 @@ import Master from './Master.vue'
 </style>
 
 <template>
-    <Master />
+    <MasterLayout />    
 
     <div class="content-wrapper">
         <div class="content-header" style="padding: 15px 8px 0px 8px;">
             <div class="card headerCustom">
                 <div>
-                    <h1>City</h1>
+                    <h1>City</h1>                    
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalAddCity">
+                    <button type="button" class="btn btn-sm btn-success" @click="addModal">
                         <i class="fas fa-plus"></i> Add City
                     </button>
                 </div>
@@ -86,31 +86,139 @@ import 'datatables.net-buttons/js/buttons.colVis.js';
 import 'datatables.net-buttons/js/buttons.html5.js';
 import 'datatables.net-buttons/js/buttons.print.js';
 import 'datatables.net-buttons/js/buttons.flash.js';
-import 'datatables.net-buttons/js/buttons.colVis.js';
 import 'datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 import 'datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 
 
+function editModal(edit_city,edit_region,edit_latitude,edit_longitude){    
+    $('#modal-primary').modal('show');
+    this.modalTitle = 'Edit City';
+
+    this.modalBody += '<div class="form-group">';
+    this.modalBody += '<label for="city">City</label>';
+    this.modalBody += '<input type="text" class="form-control" id="edit_city" placeholder="Enter City">';
+    this.modalBody += '</div>';
+    this.modalBody += '<div class="form-group">';
+    this.modalBody += '<label for="region">Region</label>';
+    this.modalBody += '<select id="edit_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">';
+    this.modalBody += '<option value="">Select Region</option>';
+    this.regions.forEach((region) => {
+        if (region.region == edit_region) {
+            this.modalBody += '<option value="'+region.region+'" selected>'+region.region+'</option>';
+        } else {
+            this.modalBody += '<option value="'+region.region+'">'+region.region+'</option>';
+        }
+    })
+    this.modalBody += '</option>';
+    this.modalBody += '</select>';
+    this.modalBody += '</div>';
+    this.modalBody += '<div class="form-group">';
+    this.modalBody += '<label for="longitude">Longitude</label>';
+    this.modalBody += '<input type="text" class="form-control" id="edit_longitude" placeholder="Enter Longitude" value="'+edit_longitude+'">';
+    this.modalBody += '</div>';
+    this.modalBody += '<div class="form-group">';
+    this.modalBody += '<label for="latitude">Latitude</label>';
+    this.modalBody += '<input type="text" class="form-control" id="edit_latitude" placeholder="Enter Latitude" value="'+edit_latitude+'">';
+    this.modalBody += '</div>';
+
+    this.modalFooter += '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+    this.modalFooter += '<button type="button" class="btn btn-primary" @click="editCity()">Edit City</button>';
+
+    $('#modal-primary .modal-title').html(this.modalTitle);
+    $('#modal-primary .modal-body').html(this.modalBody);
+    $('#modal-primary .modal-footer').html(this.modalFooter);
+
+    this.modalTitle = '';
+    this.modalBody = [];
+    this.modalFooter = [];        
+}
 
 export default {
     name: "CityView",
     components: {
-        Master,
+        MasterLayout,
     },
     data() {
         return {
             cities: [],
             selected: '',
-            regions: [],
+            regions: [],     
+            modalTitle: '',
+            modalBody: [],
+            modalFooter: []
         }
     },
-    mounted() {
+    mounted() {                                
         this.initTable();
         this.getCities();
         this.getRegion();
     },
     methods: {        
+        test() {
+            console.log('test');
+        },
+        addModal() {
+            $('#modal-primary').modal('show');     
+            this.modalTitle = 'Add City';
+            
+            this.modalBody += '<div class="form-group">';
+            this.modalBody += '<label for="city">City</label>';
+            this.modalBody += '<input type="text" class="form-control" id="add_city" placeholder="Enter City">';
+            this.modalBody += '</div>';
+            this.modalBody += '<div class="form-group">';
+            this.modalBody += '<label for="region">Region</label>';
+            this.modalBody += '<select id="add_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">';
+            this.modalBody += '<option selected value="">Select Region</option>';            
+            this.regions.forEach((region) => {
+                this.modalBody += '<option value="'+region.region+'">'+region.region+'</option>';
+            })
+            this.modalBody += '</option>';
+            this.modalBody += '</select>';
+            this.modalBody += '</div>';
+            this.modalBody += '<div class="form-group">';
+            this.modalBody += '<label for="longitude">Longitude</label>';
+            this.modalBody += '<input type="text" class="form-control" id="add_longitude" placeholder="Enter Longitude">';
+            this.modalBody += '</div>';
+            this.modalBody += '<div class="form-group">';
+            this.modalBody += '<label for="latitude">Latitude</label>';
+            this.modalBody += '<input type="text" class="form-control" id="add_latitude" placeholder="Enter Latitude">';            
+            this.modalBody += '</div>';
+
+            this.modalFooter += '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+            this.modalFooter += '<button type="button" class="btn btn-primary" @click="addCity()">Add City</button>';
+
+            $('#modal-primary .modal-title').html(this.modalTitle);
+            $('#modal-primary .modal-body').html(this.modalBody);
+            $('#modal-primary .modal-footer').html(this.modalFooter);
+
+            this.modalTitle = '';
+            this.modalBody = [];
+            this.modalFooter = [];            
+        },
+        editCity() {
+            let city = $('#edit_city').val();
+            let region = $('#edit_region').val();
+            let longitude = $('#edit_longitude').val();
+            let latitude = $('#edit_latitude').val();
+            let id = $('#edit_id').val();
+            let data = {
+                city: city,
+                region: region,
+                longitude: longitude,
+                latitude: latitude,
+                id: id
+            }
+            axios.post('http://localhost:8000/api/city/edit', data)
+                .then(response => {
+                    console.log(response);
+                    $('#modal-primary').modal('hide');
+                    this.getCities();
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
         selectRegion(value) {            
             $("#tableMaster").DataTable().columns(4).search(value).draw();
         },
@@ -139,8 +247,8 @@ export default {
             initTable += '<tr>';
             initTable += '<th width="0.1%" style="text-align:center;">No</th>';
             initTable += '<th width="5%">City</th>';
-            initTable += '<th width="1%">Longitude</th>';
-            initTable += '<th width="1%">Latitude</th>';
+            initTable += '<th width="0.1%">Universities Total</th>';
+            initTable += '<th width="0.1%">Students Total</th>';
             initTable += '<th width="1%">Region</th>';
             initTable += '<th width="1%">#</th>';
             initTable += '</tr>';
@@ -174,12 +282,12 @@ export default {
                 tableData += '<tr>';
                 tableData += '<td>' + idx + '</td>';
                 tableData += '<td>' + value.city + '</td>';
-                tableData += '<td>' + value.longitude + '</td>';
-                tableData += '<td>' + value.latitude + '</td>';
+                tableData += '<td style="text-align:center">' + value.universities_count + '</td>';
+                tableData += '<td style="text-align:center">' + value.students_count + '</td>';
                 tableData += '<td>' + value.region + '</td>';
                 tableData += '<td>';
-                tableData += '<div class="btn-group">';
-                tableData += '<button class="btn btn-warning" data-toggle="modal" data-target="#modalEdit" data-id="' + value.id + '" data-city="' + value.city + '" data-longitude="' + value.longitude + '" data-latitude="' + value.latitude + '" data-region="' + value.region + '"><i class="fas fa-edit"></i></button>';
+                tableData += '<div class="btn-group">';                
+                tableData += '<button class="btn btn-warning" data-toggle="modal" onclick="editModal(\'' + value.city + '\', \'' + value.region + '\', \'' + value.longitude + '\', \'' + value.latitude + '\')"><i class="fas fa-edit"></i></button>';
                 tableData += '<button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete" data-id="' + value.id + '" data-city="' + value.city + '"><i class="fas fa-trash"></i></button>';
                 tableData += '</div>';
                 tableData += '</td>';
@@ -210,6 +318,14 @@ export default {
                         ],
                     },
                     {
+                        extend: 'colvis',
+                        text: '<i class="fas fa-columns"></i> Column',
+                        className: 'btn btn-primary',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
                         extend: 'copy',
                         text: '<i class="far fa-copy"></i> Copy',
                         className: 'btn btn-primary',
@@ -234,7 +350,7 @@ export default {
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4]
                         }
-                    },
+                    },                                                            
                 ]
             });
         }

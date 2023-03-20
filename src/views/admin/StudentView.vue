@@ -4,7 +4,7 @@ import MasterLayout from './Master.vue'
 </script>
 
 <style>
- .headerCustom {
+.headerCustom {
     flex-direction: row !important;
     justify-content: space-between !important;
     padding: 10px 15px !important;
@@ -18,12 +18,12 @@ import MasterLayout from './Master.vue'
         <div class="content-header" style="padding: 15px 8px 0px 8px;">
             <div class="card headerCustom">
                 <div>
-                    <h1>University</h1>
+                    <h1>Student</h1>
                 </div>
 
-                <div class="btn-group float-right">
+                <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-primary">
-                        <i class="fas fa-plus"></i> Add Universities
+                        <i class="fas fa-plus"></i> Add Student
                     </button>
                 </div>
             </div>
@@ -104,6 +104,7 @@ export default {
             selected: '',
             regions: [],
             cities: [],
+            student: [],
         }
     },
     mounted() {
@@ -142,6 +143,8 @@ export default {
             initTable += '<thead>';
             initTable += '<tr>';
             initTable += '<th width="0.1%" style="text-align:center;">No</th>';
+            initTable += '<th width="1%">Passport</th>';
+            initTable += '<th width="5%">Nama</th>';            
             initTable += '<th width="5%">University</th>';            
             initTable += '<th width="5%">City</th>';            
             initTable += '<th width="1%">Region</th>';
@@ -155,10 +158,10 @@ export default {
         },
         getCities() {
             $('#Loading').show();
-            axios.get('http://localhost:8000/api/university')
+            axios.get('http://localhost:8000/api/student')
                 .then(response => {
 
-                    this.universities = response.data.universities;
+                    this.student = response.data.students;
                     this.renderTable();
                     $('#Loading').hide();
                 })
@@ -167,16 +170,18 @@ export default {
                     $('#Loading').hide();
                 })
         },
-        renderTable() {
+        renderTable() {            
             $('#tableMaster').DataTable().destroy();
 
             let tableData = '';
             let idx = 1;
 
-            $.each(this.universities, function (index, value) {
+            $.each(this.student, function (index, value) {
                 tableData += '<tr>';
                 tableData += '<td>' + idx + '</td>';
-                tableData += '<td>' + value.university_name + '</td>';
+                tableData += '<td>' + value.passport + '</td>';
+                tableData += '<td>' + value.name + '</td>';                
+                tableData += '<td>' + value.university_name + '</td>';                
                 tableData += '<td>' + value.city + '</td>';                
                 tableData += '<td>' + value.region + '</td>';
                 tableData += '<td>';
@@ -190,7 +195,7 @@ export default {
                 idx++;
             });
 
-            $('#bodyTableMaster').html(tableData);
+            $('#bodyTableMaster').html(tableData);            
 
             $('#tableMaster').DataTable({
                 'dom': 'Bfrtip',

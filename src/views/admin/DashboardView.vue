@@ -1,5 +1,7 @@
 <script setup>
 import MasterLayout from './Master.vue'
+import axios from 'axios';
+import $ from 'jquery';
 
 </script>
 
@@ -14,13 +16,12 @@ import MasterLayout from './Master.vue'
         </div>
         <section class="content">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="row">
                         <div class="col-lg-6 col-6">
-
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>150</h3>
+                                    <h3 id="dashboard_city_data">xx</h3>
                                     <p>Cities</p>
                                 </div>
                                 <div class="icon">
@@ -33,7 +34,7 @@ import MasterLayout from './Master.vue'
                         <div class="col-lg-6 col-6">
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>130</h3>
+                                    <h3 id="dashboard_university_data">xx</h3>
                                     <p>Universities</p>
                                 </div>
                                 <div class="icon">
@@ -57,10 +58,9 @@ import MasterLayout from './Master.vue'
                         </div>
 
                         <div class="col-lg-6 col-6">
-
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3>65</h3>
+                                    <h3 id="dashboard_student_data">65</h3>
                                     <p>Students</p>
                                 </div>
                                 <div class="icon">
@@ -72,7 +72,7 @@ import MasterLayout from './Master.vue'
 
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-7">
                     <div id="mapChartContainer"></div>
                 </div>
             </div>
@@ -90,127 +90,41 @@ require('highcharts/modules/series-label')(Highcharts);
 require('highcharts/modules/treemap')(Highcharts);
 
 
-
-function fetchChart() {
-
-    Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-mortality.json', function (data) {
-
-        var points = [],
-            regionP,
-            regionVal,
-            regionI = 2,
-            countryP,
-            countryI,
-            causeP,
-            causeI,
-            region,
-            country,
-            cause,
-            causeName = {
-                'Communicable & other Group I': 'Communicable diseases',
-                'Noncommunicable diseases': 'Non-communicable diseases',
-                Injuries: 'Injuries'
-            };
-
-        for (region in data) {
-            if (Object.hasOwnProperty.call(data, region)) {
-                regionVal = 0;
-                regionP = {
-                    id: 'id_' + regionI,
-                    name: region,                    
-                    color: Highcharts.getOptions().colors[regionI]
-
-                };
-                countryI = 0;
-                for (country in data[region]) {
-                    if (Object.hasOwnProperty.call(data[region], country)) {
-                        countryP = {
-                            id: regionP.id + '_' + countryI,
-                            name: country,
-                            parent: regionP.id
-                        };
-                        points.push(countryP);
-                        causeI = 0;
-                        for (cause in data[region][country]) {
-                            if (Object.hasOwnProperty.call(
-                                data[region][country], cause
-                            )) {
-                                causeP = {
-                                    id: countryP.id + '_' + causeI,
-                                    name: causeName[cause],
-                                    parent: countryP.id,
-                                    value: Math.round(+data[region][country][cause])
-                                };
-                                regionVal += causeP.value;
-                                points.push(causeP);
-                                causeI = causeI + 1;
-                            }
-                        }
-                        countryI = countryI + 1;
-                    }
-                }
-                regionP.value = Math.round(regionVal / countryI);
-                points.push(regionP);
-                regionI = regionI + 1;
-            }
-        }
-        
-        Highcharts.chart('mapChartContainer', {
-            series: [{
-                name: 'Regions',
-                type: 'treemap',                
-                layoutAlgorithm: 'squarified',
-                allowDrillToNode: true,
-                animationLimit: 1000,
-                dataLabels: {
-                    enabled: false
-                },
-                levels: [{
-                    level: 1,
-                    dataLabels: {
-                        enabled: true
-                    },
-                    borderWidth: 3,
-                    levelIsConstant: false
-                }, {
-                    level: 1,
-                    dataLabels: {
-                        style: {
-                            fontSize: '14px'
-                        }
-                    }
-                }],
-                accessibility: {
-                    exposeAsGroupOnly: true
-                },
-                data: points
-            }],            
-            title: {
-                text: ' ',
-                align: 'left'
-            }
-        });
-
-    });
-}
-
-
 export default {
-    name: "DashboardView",
-    mounted() {
-
-    },
+    name: "DashboardView",    
     data() {
         return {
             email: '',
             password: '',
+            sum_city: 0,
+            sum_university: 0,
+            sum_alumni: 0,
+            sum_student: 0,
         }
     },
-    created() {
-        fetchChart();
+    mounted() {
+        
     },
-    methods() {
-
+    created() {
+        this.getTotalSum();
+    },
+    methods: {
+        getTotalSum() {
+            axios.get('http://localhost:8000/api/total_resume')
+                .then(response => {
+                    console.log(response);
+                    this.sum_city = response.data.total_city;
+                    this.sum_university = response.data.total_university;    
+                    this.sum_student = response.data.total_student;
+                    $('#dashboard_city_data').html(this.sum_city);
+                    $('#dashboard_university_data').html(this.sum_university);
+                    $('#dashboard_student_data').html(this.sum_student);
+                    
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
     }
 }
 
