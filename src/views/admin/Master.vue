@@ -2,11 +2,13 @@
 import Navbar from '../../components/NavBarAdmin.vue'
 import Sidebar from '../../components/SideBarAdmin.vue'
 import Loading from '../../components/LoadingSpinner.vue';
+import Modal from '../../components/ModalAdmin.vue';
 
 </script>
 
 <template>
     <Loading />
+    <Modal />
 
     <div>
         <Navbar />
@@ -24,35 +26,22 @@ export default {
         Navbar,
         Sidebar
     },
+    data() {
+        return {
+            user: '',
+        }
+    },
     created() {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        this.getUser();
+        this.getUser();        
     },
     methods: {
-        userLogout() {
-            
-            let data = {
-                token: localStorage.getItem('token')
-            };
-
-           axios.post('http://localhost:8000/api/logout', data)
-            .then(response => {
-                response.data;
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                this.$router.push({ name: 'Login' });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        },
-
         getUser() {
-            $('#Loading').show();
+            $('#Loading').show();                        
             axios.get('http://localhost:8000/api/user')
                 .then(response => {
                     this.user = response.data;
-                    // console.log(this.user.data.name);
+                    localStorage.setItem('user', JSON.stringify(this.user));
                     $("#hi-user").html('');
                     $("#hi-user").append(" " + this.user.data.name);
                     $('#Loading').hide();

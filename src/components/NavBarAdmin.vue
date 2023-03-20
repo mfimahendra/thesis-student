@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios';
 import $ from 'jquery';
 
 </script>
@@ -50,5 +51,36 @@ import $ from 'jquery';
 
 <script>
 $("#toggle-sidebar").ControlSidebar('toggle');
+
+export default {
+    name: "NavBar",
+    data() {
+        return {
+            user: null,
+            data: null
+        }
+    },
+    mounted() {
+        
+    },
+    methods: {
+        userLogout() {                        
+            let data = {
+                token: localStorage.getItem('token')
+            };
+
+           axios.post('http://localhost:8000/api/logout', data)
+            .then(response => {
+                response.data;
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                this.$router.push({ name: 'Login' });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+    }
+}
 
 </script>

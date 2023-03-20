@@ -55,22 +55,20 @@ import PPITLogo from '../assets/PPIT.jpg'
                                     <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-city"></i>
                                         <p>
-                                            City
-                                            
+                                            Cities                                            
                                         </p>
                                     </router-link>
                                 </li>                                                                                                                                                                
                                 <li class="nav-item">
-                                    <router-link to="/admin/city" class="nav-link">
+                                    <router-link to="/admin/university" class="nav-link">
                                         <i class="nav-icon fas fa-university"></i>
                                         <p>
-                                            Universities
-                                            
+                                            Universities                                    
                                         </p>
                                     </router-link>
                                 </li>                                                                                                                                                                
                                 <li class="nav-item">
-                                    <router-link to="/admin/city" class="nav-link">
+                                    <router-link to="/admin/student" class="nav-link">
                                         <i class="nav-icon fas fa-user"></i>
                                         <p>
                                             Students
