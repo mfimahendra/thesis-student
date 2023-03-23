@@ -110,6 +110,47 @@ export default {
         this.initTable();
         this.getCities();
         this.getRegion();
+        
+        // $('#tableMaster tbody').on('click', 'tr', function () {
+        //     var data = $('#tableMaster').DataTable().row($(this).parents('tr')).data();
+        //     console.log(data);
+        // });
+
+        // on each edit_modal class add event listener
+        $(document).on('click', '.edit_modal', function () {            
+            // get the data-id attribute of the clicked element
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            var city = $(this).data('city');
+            var region = $(this).data('region');
+            var address = $(this).data('address');
+            var phone = $(this).data('phone');
+            var email = $(this).data('email');
+            var website = $(this).data('website');
+            var description = $(this).data('description');
+            var logo = $(this).data('logo');
+            var image = $(this).data('image');
+            var status = $(this).data('status');
+            var created_at = $(this).data('created_at');
+            var updated_at = $(this).data('updated_at');
+            // fill the data in the input fields
+            $("#id").val(id);
+            $("#name").val(name);
+            $("#city").val(city);
+            $("#region").val(region);
+            $("#address").val(address);
+            $("#phone").val(phone);
+            $("#email").val(email);
+            $("#website").val(website);
+            $("#description").val(description);
+            $("#logo").val(logo);
+            $("#image").val(image);
+            $("#status").val(status);
+            $("#created_at").val(created_at);
+            $("#updated_at").val(updated_at);
+            // call the modal
+            $('#modal-primary').modal('show');
+        });
     },
     methods: {        
         selectRegion(value) {            
@@ -181,7 +222,7 @@ export default {
                 tableData += '<td>' + value.region + '</td>';
                 tableData += '<td>';
                 tableData += '<div class="btn-group">';
-                tableData += '<button class="btn btn-warning" data-toggle="modal" data-target="#modalEdit" data-id="' + value.id + '" data-city="' + value.city + '" data-longitude="' + value.longitude + '" data-latitude="' + value.latitude + '" data-region="' + value.region + '"><i class="fas fa-edit"></i></button>';
+                tableData += '<button id="edit_'+ value.id +'" class="btn btn-warning edit_modal" data-toggle="modal" data-target="#modalEdit" data-id="' + value.id + '" data-city="' + value.city + '" data-longitude="' + value.longitude + '" data-latitude="' + value.latitude + '" data-region="' + value.region + '"><i class="fas fa-edit"></i></button>';
                 tableData += '<button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete" data-id="' + value.id + '" data-city="' + value.city + '"><i class="fas fa-trash"></i></button>';
                 tableData += '</div>';
                 tableData += '</td>';
