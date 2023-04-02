@@ -3,7 +3,7 @@ import Navbar from "../../components/NavBarAdmin.vue";
 import Sidebar from "../../components/SideBarAdmin.vue";
 import Loading from "../../components/LoadingSpinner.vue";
 import Modal from "../../components/ModalAdmin.vue";
-import miniToastr from "mini-toastr";
+
 </script>
 
 <template>
@@ -25,7 +25,7 @@ export default {
     components: {
         Navbar,
         Sidebar,
-    },
+    },    
     data() {
         return {
             user: "",
@@ -37,16 +37,7 @@ export default {
         this.getUser();
     },
     mounted() {
-        miniToastr.init();        
-        miniToastr.setIcon("success", "i", {
-            class: "far fa-check-circle"
-        });
-        miniToastr.setIcon("error", "i", {
-            class: "far fa-exclamation-triangle"
-        });
-        miniToastr.setIcon("info", "i", {
-            class: "far fa-exclamation-circle"
-        });
+        
     },
     methods: {
         getUser() {
@@ -73,10 +64,5 @@ export default {
 
 
 <style>
-.mini-toastr__notification {
-    border-radius: 2px !important;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2) !important;
-    font-size: 14px !important;        
-}
 
 </style>

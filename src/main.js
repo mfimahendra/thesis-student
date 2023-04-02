@@ -47,8 +47,9 @@ import "../node_modules/admin-lte/plugins/bootstrap4-duallistbox/bootstrap-duall
 import "../node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css"
 import "../node_modules/admin-lte/plugins/dropzone/min/dropzone.min.css"
 
-
-//dataTable
+// Gritter vue plugin
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 require( 'jquery' );
 require( 'jszip' );
@@ -62,6 +63,23 @@ library.add(fas, fab, far, faLock, faEnvelope, faFacebook, faGooglePlus);
 dom.watch()
 
 
+// createApp(App).component("font-awesome-icon", FontAwesomeIcon).use(router).mount('#app')
 
-createApp(App).component("font-awesome-icon", FontAwesomeIcon).use(router).mount('#app')
+// App.use(Toast , {
+//     transition: "Vue-Toastification__bounce",
+//     maxToasts: 20,
+//     newestOnTop: true
+// });
 
+const app = createApp(App);
+
+app.use(Toast, {
+  transition: 'Vue-Toastification__bounce',
+  maxToasts: 20,
+  newestOnTop: true,
+  position: 'top-right'
+});
+
+app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(router);
+app.mount('#app');

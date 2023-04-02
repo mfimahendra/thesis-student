@@ -1,8 +1,3 @@
-<script setup>
-    import MasterLayout from "./Master.vue";
-    import miniToastr from "mini-toastr";
-</script>
-
 <style>
     .headerCustom {
         display: flex;
@@ -22,20 +17,25 @@
 
     <div class="content-wrapper">
         <div class="content-header" style="padding: 15px 8px 0px 8px">
-            <div class="card headerCustom">
-                <div>
-                    <h1>City</h1>
+            <div class="card">
+                <div class="row" style="padding: 10px 15px;">
+                    <div class="col-1">
+                        <h1>City</h1>                        
+                    </div>
+                    <div class="col-5"></div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-sm btn-info me-1" @click="getCities">
+                            <i class="fas fa-refresh"></i> Refresh
+                        </button>
+                        <button type="button" class="btn btn-sm btn-success" @click="addModal">
+                            <i class="fas fa-plus"></i> Add City
+                        </button>
+                    </div>
                 </div>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-success" @click="addModal">
-                        <i class="fas fa-plus"></i> Add City
-                    </button>
-                    <button type="button" class="btn btn-sm btn-info" @click="getCities">
-                        <i class="fas fa-refresh"></i> Refresh
-                    </button>
-                </div>
-            </div>
+                <div class="row">
+                    <div id="CityChartContainer"></div>
+                </div>                
+            </div>            
             <div class="card headerCustom">
                 <div class="col-3">
                     <div class="input-group">
@@ -75,8 +75,13 @@
 </template>
 
 <script>
+    import MasterLayout from "./Master.vue";      
+
     import axios from "axios";
     import $ from "jquery";
+
+    import { useToast } from "vue-toastification";
+
     import "datatables.net";
     import "datatables.net-bs4";
     import "datatables.net-buttons";
@@ -89,10 +94,20 @@
     import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
     import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
 
+    var Highcharts = require('highcharts');
+    require('highcharts/modules/exporting')(Highcharts);
+    require('highcharts/modules/export-data')(Highcharts);
+    require('highcharts/modules/accessibility')(Highcharts);
+
+
     export default {
         name: "CityView",
         components: {
             MasterLayout,
+        },
+        setup() {
+            const { success, error, info, warning  } = useToast();
+            return { success, error , info, warning };
         },
         data() {
             return {
@@ -107,7 +122,7 @@
         mounted() {
             this.initTable();
             this.getCities();
-            this.getRegion();
+            this.getRegion();            
 
             $("#modal-primary").modal("hide");
 
@@ -136,7 +151,7 @@
         },
         methods: {
             test() {
-                console.log("Hello World");
+                this.info("Welcome to City Page");
             },
             addModal() {
                 $("#modal-primary").modal("show");
@@ -203,13 +218,15 @@
                             $("#modal-primary").modal("hide");
                             this.getCities();
                             $("#Loading").hide();
-                            miniToastr.success(response.data.message, "Success", 3000);
+                            this.success(response.data.message);
+
                         }
                     })
                     .catch((error) => {
+                        console.log(error);
                         $("#modal-primary").modal("hide");
-                        $("#Loading").hide();
-                        miniToastr.error(error.response.data.message, "Error", 3000);
+                        $("#Loading").hide();                      
+                        this.error(error);  
                     });
             },
             editModal(id, city, region, latitude, longitude) {
@@ -295,12 +312,12 @@
             deleteCity(id) {                        
                 if (confirm("Are you sure you want to delete this city?")) {                    
                     axios.delete("http://127.0.0.1:8000/api/city/" + id)
-                        .then((response) => {                                                        
-                            miniToastr.success(response.data.message, "Success", 3000);
+                        .then((response) => {                                                                                    
+                            console.log(response);
                             this.getCities();
                         })
-                        .catch((error) => {
-                            miniToastr.error(error.response.data.message, "Error", 3000);
+                        .catch((error) => {                            
+                            console.log(error);
                         });
                 }
             },
@@ -318,11 +335,11 @@
                         this.regions.forEach((region) => {
                             region.value = region.region;
                         });
-                        $("#Loading").hide();
+                        $("#Loading").hide();                        
                     })
                     .catch((error) => {                        
-                        $("#Loading").hide();
-                        miniToastr.error(error.response.data.message, "Error", 3000);
+                        console.log(error);
+                        $("#Loading").hide();                        
                     });
             },
             initTable() {
@@ -350,19 +367,20 @@
                     .then((response) => {
                         this.cities = response.data.cities;
                         this.renderTable();
-                        $("#Loading").hide();
-                        miniToastr.success("Data Loaded", "Success", 3000);
+                        this.cityChart();
+                        $("#Loading").hide();                 
+                        this.success("City Loaded Successfully");
                     })
                     .catch((error) => {
-                        $("#Loading").hide();
-                        miniToastr.error(error, "Error", 3000);
+                        console.log(error);
+                        $("#Loading").hide();                        
                     });
             },
             renderTable() {
                 $("#tableMaster").DataTable().destroy();
 
                 let tableData = "";
-                let idx = 1;
+                let idx = 1;                                
 
                 $.each(this.cities, function(index, value) {
                     tableData += "<tr>";
@@ -454,6 +472,56 @@
                     ],
                 });
             },
+            cityChart() {                                
+
+                const chartData = this.cities;                                                                
+                
+                const CityData = chartData.map((item) => {                
+                    return item.city;
+                });
+
+                const StudentData = chartData.map((item) => {                
+                    return item.students_count;
+                });
+
+                const UniversityData = chartData.map((item) => {                
+                    return item.universities_count;
+                });
+
+                Highcharts.chart('CityChartContainer', {
+                    data: {
+                        table: this.cities
+                    },                    
+                    colors: ['#28a9be', '#f7a35c'],
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: CityData,
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: ''
+                        }
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    series: [{
+                        name: 'Universities',
+                        data: UniversityData
+                    },
+                    {
+                        name: 'Students',
+                        data: StudentData
+                    }]
+                });
+            }
+
 
             // End of Mounted
         },

@@ -34,6 +34,14 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/admin/sandbox',
+    name: 'Sandbox',
+    component: () => import('../views/admin/SandboxView.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 
   //Client Page
   {
