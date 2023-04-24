@@ -50,7 +50,15 @@ import PPITLogo from '../assets/PPIT.jpg'
                                             Dashboard
                                         </p>
                                     </router-link>
-                                </li>                                           
+                                </li>
+                                <li class="nav-item">
+                                    <router-link to="/admin/map" class="nav-link">
+                                        <i class="nav-icon fas fa-map-marked-alt"></i>
+                                        <p>
+                                            Map
+                                        </p>
+                                    </router-link>
+                                </li>
                                 <li class="nav-item">
                                     <router-link to="/admin/city" class="nav-link">
                                         <i class="nav-icon fas fa-city"></i>

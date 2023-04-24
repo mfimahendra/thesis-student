@@ -1,12 +1,6 @@
-<script setup>
-import axios from 'axios';
-import Loading from '../components/LoadingSpinner.vue';
-
-</script>
-
 <template>
-    <Loading />
-    <!-- Section: Design Block -->
+    <Loading />    
+    <ParticlesBg type="cobweb" bg="{true}" :config="bgConfig" color="#ed1b24" />
     <section class="loginForm vh-100">
         <form @submit.prevent="handleSubmit">
             <div class="container py-5 h-100">
@@ -41,11 +35,9 @@ import Loading from '../components/LoadingSpinner.vue';
         </form>
     </section>
 </template>
-
 <style>
-.vh-100 {
-    height: 100vh !important;
-    background-color: #333;
+.canvas {
+    background-color: #f3f3f3;
 }
 
 .customCard {
@@ -55,14 +47,27 @@ import Loading from '../components/LoadingSpinner.vue';
 
 <script>
 import $ from 'jquery';
+import { useToast } from 'vue-toastification';  
+import Loading from '../components/LoadingSpinner.vue';
+import axios from 'axios';
+import { ParticlesBg } from "particles-bg-vue";
 
 export default {
+    name: 'LoginView',
+    components: {
+        Loading,
+        ParticlesBg
+    },    
+    setup() {
+        const { success, error, info, warning } = useToast();
+        return { success, error, info, warning };
+    },    
     data() {
         return {
             email: "",
             password: "",
         };
-    },
+    },    
     mounted() {
         $('#Loading').hide();
     },
@@ -80,7 +85,7 @@ export default {
                 this.$router.push('/admin/dashboard');
             } catch (error) {
                 $('#Loading').hide();
-                console.log(error);
+                this.error('Email or password is wrong!');                
             }
         }
     },

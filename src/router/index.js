@@ -9,7 +9,15 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  },  
+  },
+  {
+    path: '/admin/map',
+    name: 'Map',
+    component: () => import('../views/admin/MapView.vue'),    
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: '/admin/city',
     name: 'City',
@@ -53,6 +61,16 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import('../views/AboutView.vue')
+  },
+  {
+    path: '/map',
+    name: 'Map',
+    component: () => import('../views/MapsView.vue')
+  },
+  {
+    path: '/form',
+    name: 'Student Form',
+    component: () => import('../views/FormView.vue')
   },
   {
     path: '/login',

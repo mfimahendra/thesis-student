@@ -9,7 +9,7 @@
 
     .dataTables_filter {
         display: none;
-    }
+    }         
 </style>
 
 <template>
@@ -18,24 +18,26 @@
     <div class="content-wrapper">
         <div class="content-header" style="padding: 15px 8px 0px 8px">
             <div class="card">
-                <div class="row" style="padding: 10px 15px;">
+                <div class="row" style="padding: 10px 15px">
                     <div class="col-1">
-                        <h1>City</h1>                        
+                        <h1>City</h1>
                     </div>
                     <div class="col-5"></div>
                     <div class="col-6 text-end">
-                        <button type="button" class="btn btn-sm btn-info me-1" @click="getCities">
-                            <i class="fas fa-refresh"></i> Refresh
-                        </button>
-                        <button type="button" class="btn btn-sm btn-success" @click="addModal">
-                            <i class="fas fa-plus"></i> Add City
-                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getCities">
+                                <i class="fas fa-refresh"></i> Refresh
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#AddCityModal">
+                                <i class="fas fa-plus"></i> Add City
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div id="CityChartContainer"></div>
-                </div>                
-            </div>            
+                </div>
+            </div>
             <div class="card headerCustom">
                 <div class="col-3">
                     <div class="input-group">
@@ -71,16 +73,119 @@
                 </div>
             </div>
         </section>
+
+        <!-- MODAL -->
+        <div class="modal fade" id="AddCityModal" tabindex="-1" role="dialog" aria-labelledby="modal-primaryLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add City Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="add_city" placeholder="Enter City" />
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Region</label>
+                                <select id="add_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">
+                                    <option selected value="">Select Region</option>
+                                    <option v-for="region in regions" :key="region.id" :value="region.region">
+                                        {{ region . region }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="longitude">Longitude</label>
+                                <input type="text" class="form-control" id="add_longitude" placeholder="Enter Longitude" />
+                            </div>
+                            <div class="form-group">
+                                <label for="latitude">Latitude</label>
+                                <input type="text" class="form-control" id="add_latitude" placeholder="Enter Latitude" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="addCity()">
+                                Add City
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIT MODAL -->
+        <div class="modal fade" id="EditCityModal" tabindex="-1" role="dialog" aria-labelledby="modal-primaryLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit City Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">                            
+                            <div class="col col-sm-9 edit_city_map_container" id="editCityMap">                                                                        
+                            </div>                            
+                            <div class="col col-sm-3">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" id="edit_city" placeholder="Enter City" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="region">Region</label>
+                                    <select id="edit_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">
+                                        <option selected value="">Select Region</option>
+                                        <option v-for="region in regions" :key="region.id" :value="region.region">
+                                            {{ region . region }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="longitude">Longitude</label>
+                                    <input type="text" class="form-control" id="edit_latitude" placeholder="Enter Longitude" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="latitude">Latitude</label>
+                                    <input type="text" class="form-control" id="edit_longitude" placeholder="Enter Latitude" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="addCity()">
+                                Add City
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END OF TEMPLATE -->
     </div>
 </template>
 
 <script>
-    import MasterLayout from "./Master.vue";      
-
+    import MasterLayout from "./Master.vue";
+    import L from "leaflet";
+    import "leaflet/dist/leaflet.css";
     import axios from "axios";
     import $ from "jquery";
 
-    import { useToast } from "vue-toastification";
+    import {
+        useToast
+    } from "vue-toastification";
 
     import "datatables.net";
     import "datatables.net-bs4";
@@ -94,11 +199,11 @@
     import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
     import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
 
-    var Highcharts = require('highcharts');
-    require('highcharts/modules/exporting')(Highcharts);
-    require('highcharts/modules/export-data')(Highcharts);
-    require('highcharts/modules/accessibility')(Highcharts);
-
+    var Highcharts = require("highcharts");
+    require("highcharts/modules/exporting")(Highcharts);
+    require("highcharts/modules/export-data")(Highcharts);
+    require("highcharts/modules/accessibility")(Highcharts);    
+    
 
     export default {
         name: "CityView",
@@ -106,8 +211,18 @@
             MasterLayout,
         },
         setup() {
-            const { success, error, info, warning  } = useToast();
-            return { success, error , info, warning };
+            const {
+                success,
+                error,
+                info,
+                warning
+            } = useToast();
+            return {
+                success,
+                error,
+                info,
+                warning,
+            };
         },
         data() {
             return {
@@ -117,87 +232,50 @@
                 modalTitle: "",
                 modalBody: [],
                 modalFooter: [],
+                editCityMap: '',
+                marker: '',
             };
         },
         mounted() {
             this.initTable();
             this.getCities();
-            this.getRegion();            
+            this.getRegion();       
+            this.initEditMap();             
+            
+            window.vueMethod = this;
 
             $("#modal-primary").modal("hide");
-
-            $(document).one("click", "#btn-addCity", () => {
-                this.addCity();
-            });
 
             $(document).on("click", ".btn-deleteCity", (event) => {
                 let id = $(event.currentTarget).data("id");
                 this.deleteCity(id);
-            });
+            });            
 
-            $(document).one("click", ".btn-editModal", (event) => {
-                var id = $(event.currentTarget).data("id");
-                var city = $(event.currentTarget).data("city");
-                var region = $(event.currentTarget).data("region");
-                var latitude = $(event.currentTarget).data("latitude");
-                var longitude = $(event.currentTarget).data("longitude");
+            $(document).on('click', '.btnEditModal', function() {
+                var id = $(this).data('id');
+                var city = $(this).data('city');
+                var region = $(this).data('region');
+                var latitude = $(this).data('latitude');
+                var longitude = $(this).data('longitude');
+                console.log(id, city, region, latitude, longitude);
 
-                this.editModal(id, city, region, latitude, longitude);
-            });
+                $('#edit_id').val(id);
+                $('#edit_city').val(city);
+                $('#edit_region').val(region);
+                $('#edit_latitude').val(latitude);
+                $('#edit_longitude').val(longitude);         
 
-            // $(document).on("click", ".btn-editCity", (event) => {
+                var vueMethod = window.vueMethod;                                                
 
-            // });
+                vueMethod.updateCityMap();   
+
+            });            
+
         },
         methods: {
             test() {
                 this.info("Welcome to City Page");
-            },
-            addModal() {
-                $("#modal-primary").modal("show");
-                this.modalTitle = "Add City";
-
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="city">City</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="add_city" placeholder="Enter City">';
-                this.modalBody += "</div>";
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="region">Region</label>';
-                this.modalBody +=
-                    '<select id="add_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">';
-                this.modalBody += '<option selected value="">Select Region</option>';
-                this.regions.forEach((region) => {
-                    this.modalBody +=
-                        '<option value="' + region.id + '">' + region.region + "</option>";
-                });
-                this.modalBody += "</option>";
-                this.modalBody += "</select>";
-                this.modalBody += "</div>";
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="longitude">Longitude</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="add_longitude" placeholder="Enter Longitude">';
-                this.modalBody += "</div>";
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="latitude">Latitude</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="add_latitude" placeholder="Enter Latitude">';
-                this.modalBody += "</div>";
-
-                this.modalFooter +=
-                    '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-                this.modalFooter +=
-                    '<button type="button" id="btn-addCity" class="btn btn-primary">Add City</button>';
-
-                $("#modal-primary .modal-title").html(this.modalTitle);
-                $("#modal-primary .modal-body").html(this.modalBody);
-                $("#modal-primary .modal-footer").html(this.modalFooter);
-
-                this.modalTitle = "";
-                this.modalBody = [];
-                this.modalFooter = [];
-            },
+            },            
             addCity() {
                 var city = $("#add_city").val();
                 var region = $("#add_region").val();
@@ -219,72 +297,15 @@
                             this.getCities();
                             $("#Loading").hide();
                             this.success(response.data.message);
-
                         }
                     })
                     .catch((error) => {
                         console.log(error);
                         $("#modal-primary").modal("hide");
-                        $("#Loading").hide();                      
-                        this.error(error);  
+                        $("#Loading").hide();
+                        this.error(error);
                     });
             },
-            editModal(id, city, region, latitude, longitude) {
-                this.modalTitle = "Edit City";
-                this.modalBody = "";
-                this.modalFooter = "";
-
-                $("#modal-primary").modal("show");
-                this.modalTitle = "Edit City";
-
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="city">City</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="edit_city" placeholder="Enter City" value="' +
-                    city +
-                    '">';
-                this.modalBody += "</div>";
-
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="region">Region</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="edit_region" placeholder="Enter Region" value="' +
-                    region +
-                    '">';
-                this.modalBody += "</div>";
-
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="latitude">Latitude</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="edit_latitude" placeholder="Enter Latitude" value="' +
-                    latitude +
-                    '">';
-                this.modalBody += "</div>";
-
-                this.modalBody += '<div class="form-group">';
-                this.modalBody += '<label for="longitude">Longitude</label>';
-                this.modalBody +=
-                    '<input type="text" class="form-control" id="edit_longitude" placeholder="Enter Longitude" value="' +
-                    longitude +
-                    '">';
-                this.modalBody += "</div>";
-
-                this.modalBody += '<input type="hidden" id="edit_id" value="' + id + '">';
-
-                this.modalFooter +=
-                    '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-                this.modalFooter +=
-                    '<button type="button" class="btn btn-primary btn-editCity">Save changes</button>';
-
-                $("#modal-primary .modal-title").html(this.modalTitle);
-                $("#modal-primary .modal-body").html(this.modalBody);
-                $("#modal-primary .modal-footer").html(this.modalFooter);
-
-                this.modalTitle = "";
-                this.modalBody = [];
-                this.modalFooter = [];
-            },
-            // TODO: Edit City Function
             editCity() {
                 let city = $("#edit_city").val();
                 let region = $("#edit_region").val();
@@ -309,14 +330,15 @@
                         console.log(error);
                     });
             },
-            deleteCity(id) {                        
-                if (confirm("Are you sure you want to delete this city?")) {                    
-                    axios.delete("http://127.0.0.1:8000/api/city/" + id)
-                        .then((response) => {                                                                                    
+            deleteCity(id) {
+                if (confirm("Are you sure you want to delete this city?")) {
+                    axios
+                        .delete("http://127.0.0.1:8000/api/city/" + id)
+                        .then((response) => {
                             console.log(response);
                             this.getCities();
                         })
-                        .catch((error) => {                            
+                        .catch((error) => {
                             console.log(error);
                         });
                 }
@@ -335,12 +357,37 @@
                         this.regions.forEach((region) => {
                             region.value = region.region;
                         });
-                        $("#Loading").hide();                        
+                        $("#Loading").hide();
                     })
-                    .catch((error) => {                        
+                    .catch((error) => {
                         console.log(error);
-                        $("#Loading").hide();                        
+                        $("#Loading").hide();
                     });
+            },           
+            initEditMap(){
+                this.editCityMap = L.map('editCityMap').setView([35.8617, 104.1954], 7);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(this.editCityMap);                
+            },
+            updateCityMap(){
+                let latitude = $("#edit_latitude").val();
+                let longitude = $("#edit_longitude").val();
+                this.editCityMap.setView([latitude, longitude], 7);
+                if(this.marker != ''){
+                    this.editCityMap.removeLayer(this.marker);
+                }                
+                                    
+                this.marker = L.marker([latitude, longitude], {                    
+                    icon: L.icon({
+                        iconUrl: require("@/assets/marker.png"),
+                        iconSize: [25, 40],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41],
+                    })
+                    // icon: L.icon
+                }).addTo(this.editCityMap);                
             },
             initTable() {
                 let initTable = "";
@@ -368,19 +415,19 @@
                         this.cities = response.data.cities;
                         this.renderTable();
                         this.cityChart();
-                        $("#Loading").hide();                 
+                        $("#Loading").hide();
                         this.success("City Loaded Successfully");
                     })
                     .catch((error) => {
                         console.log(error);
-                        $("#Loading").hide();                        
+                        $("#Loading").hide();
                     });
             },
             renderTable() {
                 $("#tableMaster").DataTable().destroy();
 
                 let tableData = "";
-                let idx = 1;                                
+                let idx = 1;
 
                 $.each(this.cities, function(index, value) {
                     tableData += "<tr>";
@@ -393,7 +440,7 @@
                     tableData += "<td>";
                     tableData += '<div class="btn-group">';
                     tableData +=
-                        '<button class="btn-editModal btn btn-warning" data-id="' +
+                        '<button class="btnEditModal btn btn-warning" data-id="' +
                         value.id +
                         '" data-city="' +
                         value.city +
@@ -403,7 +450,7 @@
                         value.longitude +
                         '" data-latitude="' +
                         value.latitude +
-                        '"><i class="fas fa-edit"></i></button>';
+                        '" data-toggle="modal" data-target="#EditCityModal"><i class="fas fa-edit"></i></button>';
                     tableData +=
                         '<button class="btn-deleteCity btn btn-danger" data-id="' +
                         value.id +
@@ -472,32 +519,31 @@
                     ],
                 });
             },
-            cityChart() {                                
+            cityChart() {
+                const chartData = this.cities;
 
-                const chartData = this.cities;                                                                
-                
-                const CityData = chartData.map((item) => {                
+                const CityData = chartData.map((item) => {
                     return item.city;
                 });
 
-                const StudentData = chartData.map((item) => {                
+                const StudentData = chartData.map((item) => {
                     return item.students_count;
                 });
 
-                const UniversityData = chartData.map((item) => {                
+                const UniversityData = chartData.map((item) => {
                     return item.universities_count;
                 });
 
-                Highcharts.chart('CityChartContainer', {
+                Highcharts.chart("CityChartContainer", {
                     data: {
-                        table: this.cities
-                    },                    
-                    colors: ['#28a9be', '#f7a35c'],
+                        table: this.cities,
+                    },
+                    colors: ["#28a9be", "#f7a35c"],
                     chart: {
-                        type: 'column'
+                        type: "column",
                     },
                     title: {
-                        text: ''
+                        text: "",
                     },
                     xAxis: {
                         categories: CityData,
@@ -505,23 +551,23 @@
                     yAxis: {
                         allowDecimals: false,
                         title: {
-                            text: ''
-                        }
+                            text: "",
+                        },
                     },
                     legend: {
-                        enabled: true
+                        enabled: true,
                     },
                     series: [{
-                        name: 'Universities',
-                        data: UniversityData
-                    },
-                    {
-                        name: 'Students',
-                        data: StudentData
-                    }]
+                            name: "Universities",
+                            data: UniversityData,
+                        },
+                        {
+                            name: "Students",
+                            data: StudentData,
+                        },
+                    ],
                 });
-            }
-
+            },
 
             // End of Mounted
         },

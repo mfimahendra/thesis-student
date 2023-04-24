@@ -1,14 +1,13 @@
-<script setup>
-import MasterLayout from './Master.vue'
-
-</script>
-
 <style>
  .headerCustom {
     flex-direction: row !important;
     justify-content: space-between !important;
     padding: 10px 15px !important;
  }
+
+ .dataTables_filter {
+    display: none;
+}
 </style>
 
 <template>
@@ -22,7 +21,7 @@ import MasterLayout from './Master.vue'
                 </div>
 
                 <div class="btn-group float-right">
-                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-primary">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#modal-primary">
                         <i class="fas fa-plus"></i> Add Universities
                     </button>
                 </div>
@@ -78,25 +77,34 @@ import MasterLayout from './Master.vue'
 </template>
 
 <script>
-import axios from 'axios';
-import $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs4';
-import 'datatables.net-buttons';
-import 'datatables.net-buttons-bs4';
-import 'datatables.net-buttons/js/buttons.colVis.js';
-import 'datatables.net-buttons/js/buttons.html5.js';
-import 'datatables.net-buttons/js/buttons.print.js';
-import 'datatables.net-buttons/js/buttons.flash.js';
-import 'datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
-import 'datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
+import MasterLayout from "./Master.vue";      
+
+import axios from "axios";
+import $ from "jquery";
+
+import { useToast } from "vue-toastification";
+
+import "datatables.net";
+import "datatables.net-bs4";
+import "datatables.net-buttons";
+import "datatables.net-buttons-bs4";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
 
 
 export default {
     name: "CityView",
     components: {
         MasterLayout,
+    },    
+    setup() {
+        const { success, error, info, warning  } = useToast();
+        return { success, error , info, warning };
     },
     data() {
         return {
@@ -154,10 +162,10 @@ export default {
     },
     methods: {        
         selectRegion(value) {            
-            $("#tableMaster").DataTable().columns(3).search(value).draw();
+            $("#tableMaster").DataTable().columns(4).search(value).draw();
         },
         searchCity(value){                        
-            $("#tableMaster").DataTable().columns(2).search(value).draw();
+            $("#tableMaster").DataTable().columns(3).search(value).draw();
         },
         searchUniversity(value){                        
             $("#tableMaster").DataTable().columns(1).search(value).draw();
@@ -183,7 +191,8 @@ export default {
             initTable += '<thead>';
             initTable += '<tr>';
             initTable += '<th width="0.1%" style="text-align:center;">No</th>';
-            initTable += '<th width="5%">University</th>';            
+            initTable += '<th width="5%">University</th>';     
+            initTable += '<th width="1%">Students Total</th>';       
             initTable += '<th width="5%">City</th>';            
             initTable += '<th width="1%">Region</th>';
             initTable += '<th width="1%">#</th>';
@@ -202,9 +211,10 @@ export default {
                     this.universities = response.data.universities;
                     this.renderTable();
                     $('#Loading').hide();
+                    this.success('Universities Loaded');
                 })
                 .catch(error => {
-                    console.log(error);
+                    this.error(error);
                     $('#Loading').hide();
                 })
         },
@@ -218,6 +228,7 @@ export default {
                 tableData += '<tr>';
                 tableData += '<td>' + idx + '</td>';
                 tableData += '<td>' + value.university_name + '</td>';
+                tableData += '<td>' + value.students_count + '</td>';
                 tableData += '<td>' + value.city + '</td>';                
                 tableData += '<td>' + value.region + '</td>';
                 tableData += '<td>';

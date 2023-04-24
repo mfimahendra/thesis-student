@@ -20,7 +20,7 @@ import $ from 'jquery';
         </ul>
 
         <!-- SEARCH FORM -->
-        <div class="form-inline ml-3">
+        <!-- <div class="form-inline ml-3">
             <div class="input-group input-group-sm">
                 <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
@@ -29,7 +29,7 @@ import $ from 'jquery';
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
         
         <ul class="navbar-nav ml-auto">                              
             <li class="nav-item dropdown">

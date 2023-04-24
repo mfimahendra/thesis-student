@@ -1,8 +1,3 @@
-<script setup>
-import MasterLayout from './Master.vue'
-
-</script>
-
 <style>
 .headerCustom {
     flex-direction: row !important;
@@ -22,7 +17,7 @@ import MasterLayout from './Master.vue'
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-primary">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#modal-primary">
                         <i class="fas fa-plus"></i> Add Student
                     </button>
                 </div>
@@ -78,8 +73,13 @@ import MasterLayout from './Master.vue'
 </template>
 
 <script>
+import MasterLayout from './Master.vue'
+
 import axios from 'axios';
 import $ from 'jquery';
+
+import { useToast } from 'vue-toastification';
+
 import 'datatables.net';
 import 'datatables.net-bs4';
 import 'datatables.net-buttons';
@@ -97,6 +97,10 @@ export default {
     name: "CityView",
     components: {
         MasterLayout,
+    },
+    setup() {
+        const { success, error, info, warning  } = useToast();
+        return { success, error , info, warning };
     },
     data() {
         return {
