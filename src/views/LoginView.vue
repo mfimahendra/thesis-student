@@ -73,8 +73,13 @@ export default {
     },
     methods: {
         async handleSubmit() {
+            if (this.email == "" || this.password == "") {
+                    $('#Loading').hide();
+                    this.error('Email or password cannot be empty!');
+                    return;
+                }
             $('#Loading').show();
-            try {
+            try {                
                 const response = await axios.post('http://127.0.0.1:8000/api/login', {
                     email: this.email,
                     password: this.password,

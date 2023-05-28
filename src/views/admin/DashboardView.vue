@@ -116,9 +116,8 @@
         },
         methods: {
             getTotalSum() {
-                axios.get('http://localhost:8000/api/total_resume')
-                    .then(response => {
-                        console.log(response);
+                axios.get('http://localhost:8000/api/public/total_resume')
+                    .then(response => {                        
                         this.sum_city = response.data.total_city;
                         this.sum_university = response.data.total_university;
                         this.sum_student = response.data.total_student;
@@ -133,8 +132,7 @@
             },
             getChartData() {
                 axios.get('http://localhost:8000/api/region')
-                    .then(response => {
-                        console.log(response);
+                    .then(response => {                        
                         this.ChartData = response.data;
                         this.renderChart();
                     })

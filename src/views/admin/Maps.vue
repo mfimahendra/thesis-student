@@ -3,8 +3,8 @@
 </template>
 <script>
 import L from "leaflet";
-import { useToast } from "vue-toastification";
 import "leaflet/dist/leaflet.css";
+import { useToast } from "vue-toastification";
 import axios from "axios";
 import $ from "jquery";
 

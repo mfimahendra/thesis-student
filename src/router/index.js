@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/admin/map',
-    name: 'Map',
+    name: 'Admin Map',
     component: () => import('../views/admin/MapView.vue'),    
     meta: {
       requiresAuth: true
@@ -38,6 +38,14 @@ const routes = [
     path: '/admin/student',
     name: 'Student',
     component: () => import('../views/admin/StudentView.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/student/:studentId',
+    name: 'Student Details',
+    component: () => import('../views/admin/StudentDetails.vue'),
     meta: {
       requiresAuth: true
     }

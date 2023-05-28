@@ -48,7 +48,7 @@
                         </div>
                         <select id="SelectRegion" class="form-select" placeholder="Select Region ..." aria-label="regions" @change="selectRegion($event.target.value)" aria-describedby="SelectRegionLabel">
                             <option selected value="">All Region</option>
-                            <option v-for="region in regions" :key="region.id" :value="region.region">
+                            <option v-for="region in regions" :key="region.id" :value="region.id">
                                 {{ region . region }}
                             </option>
                         </select>
@@ -94,7 +94,7 @@
                                 <label for="region">Region</label>
                                 <select id="add_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">
                                     <option selected value="">Select Region</option>
-                                    <option v-for="region in regions" :key="region.id" :value="region.region">
+                                    <option v-for="region in regions" :key="region.id" :value="region.id">
                                         {{ region . region }}
                                     </option>
                                 </select>
@@ -144,7 +144,7 @@
                                     <label for="region">Region</label>
                                     <select id="edit_region" class="form-select" placeholder="Select Region ..." aria-label="regions" aria-describedby="SelectRegionLabel">
                                         <option selected value="">Select Region</option>
-                                        <option v-for="region in regions" :key="region.id" :value="region.region">
+                                        <option v-for="region in regions" :key="region.id" :value="region.id">
                                             {{ region . region }}
                                         </option>
                                     </select>
@@ -254,7 +254,7 @@
             $(document).on('click', '.btnEditModal', function() {
                 var id = $(this).data('id');
                 var city = $(this).data('city');
-                var region = $(this).data('region');
+                var region = $(this).data('region-id');
                 var latitude = $(this).data('latitude');
                 var longitude = $(this).data('longitude');
                 console.log(id, city, region, latitude, longitude);
@@ -289,21 +289,20 @@
                     longitude: longitude,
                 };
                 axios
-                    .post("http://127.0.0.1:8000/api/city", data)
+                    .post("/api/city", data)
                     .then((response) => {
                         $("#Loading").show();
-                        if (response.data.status == "success") {
-                            $("#modal-primary").modal("hide");
+                        if (response.status == "success") {
+                            $("#AddCityModal").modal("hide");
                             this.getCities();
                             $("#Loading").hide();
-                            this.success(response.data.message);
+                            this.success(response.message);
                         }
                     })
-                    .catch((error) => {
-                        console.log(error);
-                        $("#modal-primary").modal("hide");
+                    .catch((error) => {                        
+                        $("#AddCityModal").modal("hide");
                         $("#Loading").hide();
-                        this.error(error);
+                        this.error(error.response.data.message);
                     });
             },
             editCity() {
@@ -335,11 +334,11 @@
                     axios
                         .delete("http://127.0.0.1:8000/api/city/" + id)
                         .then((response) => {
-                            console.log(response);
+                            this.success(response.message);
                             this.getCities();
                         })
                         .catch((error) => {
-                            console.log(error);
+                            this.error(error.data.message);
                         });
                 }
             },
@@ -351,7 +350,7 @@
             },
             getRegion() {
                 axios
-                    .get("http://localhost:8000/api/region")
+                    .get("/api/region")
                     .then((response) => {
                         this.regions = response.data.regions;
                         this.regions.forEach((region) => {
@@ -360,10 +359,10 @@
                         $("#Loading").hide();
                     })
                     .catch((error) => {
-                        console.log(error);
+                        this.error(error.response.data.message);
                         $("#Loading").hide();
                     });
-            },           
+            },
             initEditMap(){
                 this.editCityMap = L.map('editCityMap').setView([35.8617, 104.1954], 7);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -444,6 +443,8 @@
                         value.id +
                         '" data-city="' +
                         value.city +
+                        '" data-region-id="' +
+                        value.region_id +
                         '" data-region="' +
                         value.region +
                         '" data-longitude="' +
@@ -542,6 +543,11 @@
                     chart: {
                         type: "column",
                     },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        }
+                    },
                     title: {
                         text: "",
                     },
@@ -557,14 +563,15 @@
                     legend: {
                         enabled: true,
                     },
-                    series: [{
-                            name: "Universities",
-                            data: UniversityData,
-                        },
+                    series: [
                         {
                             name: "Students",
                             data: StudentData,
                         },
+                        {
+                            name: "Universities",
+                            data: UniversityData,
+                        },                        
                     ],
                 });
             },

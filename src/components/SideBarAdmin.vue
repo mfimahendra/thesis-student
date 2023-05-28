@@ -22,10 +22,10 @@ import PPITLogo from '../assets/PPIT.jpg'
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4 control-sidebar-push">
 
-        <a href="" class="brand-link">            
+        <router-link to="/" class="brand-link">            
             <img :src="PPITLogo" alt="PPIT Logo" class="brand-image elevation-1 ms-3" />
             <span class="brand-text font-weight-light"> PPIT Pendataan</span>
-        </a>
+        </router-link>
 
         <div
             class="sidebar os-host os-theme-light os-host-resize-disabled os-host-transition">
